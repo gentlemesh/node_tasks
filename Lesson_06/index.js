@@ -1,4 +1,5 @@
 import express from 'express';
+import connection from './db.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -22,6 +23,31 @@ app.post('/', (req, res, next) => {
             throw new Error('Данные не отправлены');
         }
         res.send(req.body);
+    } catch (error) {
+        next(error);
+    }
+});
+
+app.get('/products', async (_, res) => {
+    try {
+        const [rows] = await connection.query('SELECT * FROM products');
+        res.json(rows);
+    } catch (error) {
+        next(error);
+    }
+});
+
+app.post('/products', async (req, res) => {
+    try {
+        const { name, price } = req.body;
+
+        if (!name || !price) {
+            return res.status(400).json({ error: 'Не указано название товара или его цена' });
+        }
+
+        await connection.query('INSERT INTO products (name, price) VALUES (?, ?)', [name, price]);
+
+        res.status(201).json({ message: 'Товар добавлен' });
     } catch (error) {
         next(error);
     }
