@@ -1,0 +1,21 @@
+meta {
+  name: update-email
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/update-email
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "newEmail": "user2@test.local"
+  }
+}

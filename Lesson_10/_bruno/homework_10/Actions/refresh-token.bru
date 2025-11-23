@@ -1,0 +1,19 @@
+meta {
+  name: refresh-token
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/refresh-token
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  bru.setVar('token', res.body.token);
+}
