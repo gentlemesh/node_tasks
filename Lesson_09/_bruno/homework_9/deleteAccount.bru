@@ -6,10 +6,16 @@ meta {
 
 post {
   url: {{baseUrl}}/delete-account
-  body: none
+  body: json
   auth: bearer
 }
 
 auth:bearer {
   token: {{token}}
+}
+
+body:json {
+  {
+    "password": "123456"
+  }
 }
