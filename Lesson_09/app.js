@@ -2,12 +2,18 @@ import express from 'express';
 import sequelize from './config/db.js';
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import User from './models/user.js';
 import { checkUserActualPasswordMiddleware } from './middleware/checkUserActualPasswordMiddleware.js';
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    throw new Error('Не установлено значение переменной окружения JWT_SECRET!');
+}
+
 const app = express();
 
 app.use(express.json());
@@ -16,6 +22,19 @@ app.use(express.json());
 app.get('/', (_, res) => {
     res.send('Homework #9');
 });
+
+// Общий метод получения токена для пользователя
+const getTokenForUser = (user, expiresIn = '1h') => jwt.sign(
+    {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        mustChangePassword: user.mustChangePassword,
+    },
+    JWT_SECRET,
+    { expiresIn }
+);
 
 // Маршрут регистрации нового пользователя
 app.post('/register', async (req, res) => {
@@ -52,7 +71,10 @@ app.post('/login', checkUserActualPasswordMiddleware, async (req, res) => {
             return res.status(401).json({ error: 'Неверный email или пароль' });
         }
 
-        res.json({ message: 'Login success' });
+        res.json({
+            message: 'Login success',
+            token: getTokenForUser(req.user),
+        });
     } catch (error) {
         console.error('Ошибка при попытке авторизации: ', error.message);
         return res.status(500).json({ error: 'Ошибка сервера при попытке авторизации' });

@@ -12,11 +12,12 @@ export async function checkUserActualPasswordMiddleware(req, res, next) {
             return res.status(401).json({ error: 'Неверный email или пароль' });
         }
 
+        req.user = user;
+
         if (user.mustChangePassword) {
-            return res.redirect(308, '/change-password-form');
+            return res.redirect(308, '/change-password');
         }
 
-        req.user = user;
         next();
     } catch (error) {
         console.error('Ошибка при проверке статуса актуальности пароля: ', error.message);
