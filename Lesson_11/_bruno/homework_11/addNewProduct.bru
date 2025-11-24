@@ -1,0 +1,18 @@
+meta {
+  name: addNewProduct
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/products
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Мой отдельный товар",
+    "price": 100.500
+  }
+}
