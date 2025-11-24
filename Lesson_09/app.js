@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import User from './models/user.js';
 import { checkUserActualPasswordMiddleware } from './middleware/checkUserActualPasswordMiddleware.js';
 import { authenticateJWT } from './middleware/authenticateJWT.js';
+import { authorizeRole } from './middleware/authorizeRole.js';
 
 dotenv.config();
 
@@ -40,14 +41,14 @@ const getTokenForUser = (user, expiresIn = '1h') => jwt.sign(
 // Маршрут регистрации нового пользователя
 app.post('/register', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, role } = req.body;
         const isExists = await User.count({ where: { email } });
         if (isExists) {
             return res.status(400).json({ error: 'Пользователь с таким email уже зарегистрирован' });
         }
 
         const passwordHash = await bcrypt.hash(password, 10);
-        const newUser = await User.create({ email, password: passwordHash });
+        const newUser = await User.create({ email, password: passwordHash, role });
 
         res.status(201).json({
             message: 'Пользователь успешно зарегистрирован',
