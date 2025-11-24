@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from './models/user.js';
 import { checkUserActualPasswordMiddleware } from './middleware/checkUserActualPasswordMiddleware.js';
+import { authenticateJWT } from './middleware/authenticateJWT.js';
 
 dotenv.config();
 
