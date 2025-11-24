@@ -28,8 +28,8 @@ app.get('/', (_, res) => {
 const getTokenForUser = (user, expiresIn = '1h') => jwt.sign(
     {
         id: user.id,
-        username: user.username,
         email: user.email,
+        password: user.password,
         role: user.role,
         mustChangePassword: user.mustChangePassword,
     },
