@@ -94,11 +94,8 @@ app.post('/delete-account', authenticateJWT, async (req, res) => {
         if (!password) {
             return res.status(400).json({ error: 'Не указан пароль' });
         }
-        console.log('password', password);
-        console.log('req.user.password', req.user.password);
 
         const isMatch = await bcrypt.compare(password, req.user.password);
-        console.log('isMatch', isMatch);
         if (!isMatch) {
             return res.status(401).json({ error: 'Неверный пароль' });
         }
