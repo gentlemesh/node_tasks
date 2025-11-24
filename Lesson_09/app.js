@@ -86,6 +86,34 @@ app.post('/change-password', (req, res) => {
     return res.json({ message: `Нужно обновить пароль`, user: req.user });
 });
 
+// Маршрут удаления учётной записи пользователя
+app.post('/delete-account', authenticateJWT, async (req, res) => {
+    try {
+        const password = req.body?.password;
+        if (!password) {
+            return res.status(400).json({ error: 'Не указан пароль' });
+        }
+        console.log('password', password);
+        console.log('req.user.password', req.user.password);
+
+        const isMatch = await bcrypt.compare(password, req.user.password);
+        console.log('isMatch', isMatch);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Неверный пароль' });
+        }
+
+        const deletedRowsCount = await User.destroy({ where: { id: req.user.id } });
+        if (deletedRowsCount > 0) {
+            return res.json({ message: 'Ваша учётная запись успешно удалена' });
+        } else {
+            return res.status(400).json({ error: 'Ваша учётная запись не удалена' });
+        }
+    } catch (error) {
+        console.error('Ошибка при попытке удаления учётной записи: ', error.message);
+        return res.status(500).json({ error: 'Ошибка сервера при попытке удаления учётной записи' });
+    }
+});
+
 
 
 app.listen(PORT, async () => {
