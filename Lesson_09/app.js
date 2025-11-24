@@ -117,6 +117,45 @@ app.get('/admin', authenticateJWT, authorizeRole('admin'), (_req, res) => {
     res.json({ message: 'Добро пожаловать в раздел для администраторов!' });
 });
 
+// Маршрут для изменения email
+app.post('/change-email', async (req, res) => {
+    try {
+        const { email, newEmail, password } = req.body;
+        if (!newEmail) {
+            return res.status(400).json({ error: 'Не указан новый email' });
+        }
+
+        const user = await User.findOne({ where: { email } });
+        if (!user) {
+            return res.status(404).json({ error: 'Пользователь не найден' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Неверный пароль' });
+        }
+
+        const isNewEmailExists = await User.count({ where: { email: newEmail } });
+        if (isNewEmailExists) {
+            return res.status(400).json({ error: `Пользователь с email "${newEmail}" уже существует` });
+        }
+
+        const [updatedRowsCount] = await User.update(
+            { email: newEmail },
+            { where: { id: user.id } }
+        );
+        if (updatedRowsCount > 0) {
+            return res.json({ message: `Email успешно изменён на ${newEmail}` });
+        } else {
+            return res.status(400).json({ error: 'Не удалось обновить email' });
+        }
+
+    } catch (error) {
+        console.error('Ошибка при попытке обновления email: ', error.message);
+        return res.status(500).json({ error: 'Ошибка сервера при попытке обновления email' });
+    }
+});
+
 
 app.listen(PORT, async () => {
     try {
