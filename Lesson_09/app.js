@@ -116,7 +116,7 @@ app.post('/delete-account', authenticateJWT, async (req, res) => {
 });
 
 // Раздел, доступный только админам
-app.get('/admin', authenticateJWT, authorizeRole('admin'), (req, res) => {
+app.get('/admin', authenticateJWT, authorizeRole('admin'), (_req, res) => {
     res.json({ message: 'Добро пожаловать в раздел для администраторов!' });
 });
 
