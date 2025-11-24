@@ -81,46 +81,8 @@ app.post('/login', checkUserActualPasswordMiddleware, async (req, res) => {
     }
 });
 
-app.post('/change-password-form', (_, res) => {
-    res.send(`
-        <html>
-            <body>
-                <form id="password_change_form" method="post" action="/change-password">
-                    <label>Старый пароль: <input type="password" name="oldPassword" /></label>
-                    <label>Новый пароль: <input type="password" name="newPassword" /></label>
-                    <button type="submit">Сменить пароль</button>
-                </form>
-            </body>
-        </html>
-    `);
-});
-
-app.post('/change-password', async (req, res) => {
-    console.log('/change-password');
-    try {
-        const { oldPassword, newPassword } = req.body;
-        if (!oldPassword || !newPassword) {
-            return res.status(400).json({ error: 'Нужно указать новый и старый пароли' });
-        }
-
-        const oldPasswordHash = await bcrypt.hash(oldPassword, 10);
-        const newPasswordHash = await bcrypt.hash(newPassword, 10);
-        const [updatedRowsCount] = await User.update(
-            { password: newPasswordHash, mustChangePassword: false },
-            { where: { password: oldPasswordHash } }
-        );
-
-        if (updatedRowsCount > 0) {
-            console.log('Успешно!', { oldPassword, newPassword });
-            return res.json({ message: `Пароль успешно обновлён` });
-        } else {
-            console.log('НЕ Успешно!', { oldPassword, newPassword });
-            return res.status(400).json({ error: `Пароль не обновлён` });
-        }
-    } catch (error) {
-        console.error('Ошибка при обновлении пароля: ', error.message);
-        return res.status(500).json({ error: 'Ошибка сервера при обновлении пароля' });
-    }
+app.post('/change-password', (req, res) => {
+    return res.json({ message: `Нужно обновить пароль`, user: req.user });
 });
 
 
