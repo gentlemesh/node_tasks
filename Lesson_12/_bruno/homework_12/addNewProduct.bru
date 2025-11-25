@@ -1,0 +1,19 @@
+meta {
+  name: addNewProduct
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/products
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Куркулятор",
+    "price": 100.5,
+    "description": "Это куркулятор, он настолько крут, что умеет считать только на 4 пальцах"
+  }
+}

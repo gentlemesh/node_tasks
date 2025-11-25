@@ -1,0 +1,19 @@
+meta {
+  name: updateLastProduct
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{baseUrl}}/products/{{lastProductId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Бурбулятор",
+    "price": 55.99,
+    "description": "Бурбулятор называется так потому, что он может производить бурбуляцию"
+  }
+}

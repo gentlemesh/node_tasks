@@ -1,0 +1,11 @@
+meta {
+  name: getFirstProduct
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/products/{{firstProductId}}
+  body: none
+  auth: none
+}

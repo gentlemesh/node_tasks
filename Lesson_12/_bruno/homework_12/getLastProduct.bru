@@ -1,0 +1,11 @@
+meta {
+  name: getLastProduct
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/products/{{lastProductId}}
+  body: none
+  auth: none
+}

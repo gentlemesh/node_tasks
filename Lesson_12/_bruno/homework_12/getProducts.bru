@@ -1,0 +1,16 @@
+meta {
+  name: getProducts
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/products
+  body: none
+  auth: none
+}
+
+script:post-response {
+  bru.setVar('firstProductId', res.body.products[0]?._id);
+  bru.setVar('lastProductId', res.body.products[res.body.products.length - 1]?._id);
+}
