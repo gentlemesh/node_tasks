@@ -1,0 +1,19 @@
+meta {
+  name: addProductPhone
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/products
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Телефон",
+    "price": 100,
+    "category": "{{categoryIdElectronics}}"
+  }
+}

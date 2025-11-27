@@ -1,0 +1,16 @@
+meta {
+  name: getCategories
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/categories
+  body: none
+  auth: none
+}
+
+script:post-response {
+  bru.setVar('categoryIdElectronics', res.body.categories.find(cat => cat.name === 'Electronics')._id);
+  bru.setVar('categoryIdBooks', res.body.categories.find(cat => cat.name === 'Books')._id);
+}
