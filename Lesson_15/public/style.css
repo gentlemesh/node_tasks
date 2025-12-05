@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#chat {
+    max-width: 900px;
+    margin: auto;
+}
+
+#messages {
+    list-style: none;
+    padding: 0;
+}
+
+#messages li {
+    display: flex;
+    align-items: start;
+    gap: 20px;
+}
+
+.time {
+    flex: 0 0 30px;
+}
+
+.username {
+    font-weight: bold;
+    flex: 0 0 30px;
+}
+
+.form-group {
+    display: flex;
+    align-items: start;
+    gap: 20px;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.form-group input,
+.form-group textarea {
+    box-sizing: border-box;
+    padding: 8px;
+}
+
+.btn-submit {
+    background-color: red;
+    color: yellow;
+    border: none;
+    font-size: 1.5em;
+    display: block;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: auto;
+    min-width: 300px;
+}
